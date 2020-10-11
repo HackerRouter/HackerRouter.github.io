@@ -142,7 +142,7 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2020-07-23T03:24:50.000Z">2020-07-23</time>
+                <time class="level-item has-text-grey" datetime="2020-10-11T14:22:00.000Z">2020-10-11</time>
                 
                 <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
@@ -152,7 +152,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    几秒 读完 (大约 17 个字)
+                    5 分钟 读完 (大约 748 个字)
                 </span>
                 
                 
@@ -161,11 +161,41 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2020/07/23/chunk-load/">公告</a>
+                <a class="has-link-black-ter" href="/2020/10/11/about-failed-to-create-a-child-event-error/">关于failed to create a child event loop报错的解决方法</a>
             
         </h1>
         <div class="content">
-            <p>博客目前正在维护中<br>预计24日维护完成<br>咕</p>
+            <p>（没错，我这个憨批已经被雷某加速器整的网络设置坑了两次了）</p>
+<p>前不久，开MC时进入服务器时，显示java.lang.IllegalStateException: failed to create a child event loop</p>
+<p>有时会显示java.lang.nullpointerexception:group，后台报错则提到java.lang.nullpointerexception:group</p>
+<p>并且在服务器列表里显示无法连接至所有服务器（可恶，这MC，不玩也罢</p>
+<hr>
+<p>下面放出报错及连接画面：</p>
+
+
+<p>起先翻了一圈百度，发现了以下几种解决方法：</p>
+<p>1.关闭防火墙并添加例外应用；</p>
+<p>2.关闭代理；</p>
+<p>3.还原hosts文件。</p>
+<p>我试着关闭防火墙，并不出乎意料的是：毫无卵用</p>
+<p>接着又尝试关闭代理，但关闭了个寂寞，还原hosts文件后还是没用</p>
+<p>我于是激动地跑去mcbbs上发了个问答帖，由于当时过于激动悬赏就设了500金粒（呜呜我的金粒</p>
+<p>在此之前，我因死活登不上steam社区（想登上的原因是为了搞facerig）改了hosts文件又用了雷某加速器</p>
+<p>当然，结果还是登不上</p>
+<p>我就死心了跑去开mc准备消遣会，结果出现了本文开头的场面</p>
+<p>正当我灰心丧气准备放弃一切放弃自我时</p>
+<p>一位救星出现了！</p>
+<p>我在mcbbs的帖子被一位大佬回复了，其原话如下：</p>
+<p>“所给信息不太足够，无法直接的断定出具体问题所在。不过根据 java.lang.IllegalStateException: failed to create a child event loop 这条错误很有可能是网络问题。<br>先将 host 文件恢复原样，使用 127.0.0.1:25565 来尝试链接一下。如果无法链接上则再尝试关闭防火墙，修复 LSP，重置部分网络设置等等，建议可以搞个“软媒魔方”里面的网络修复或者火绒中的“断网修复”功能，可以试试，实在不行也可以试试 360 的断网急救箱，虽然可能要装一次 360，但是很有可能可以解决问题。<br>一般情况下采用以上方法应该能解决绝大部分问题。”</p>
+<p>我当时便采取了这位大佬的建议</p>
+<p>你们猜最后怎么解决的？</p>
+<p>（我这个憨批装了个360重置了所有网络配置）</p>
+<p>重启电脑后，我又能上MC了（下面放个在BCP的摸鱼照</p>
+
+
+<p>弹幕“OHHHHHHHH”打起来（等等，这里不是b站哦</p>
+<p><strong>最后的总结：不要用雷某加速器加速steam了，用一次疯一次</strong></p>
+<p><del>（没错，这文章就没了）</del></p>
 
         </div>
         
@@ -423,16 +453,16 @@
         
         <article class="media">
             
-            <a href="/2020/07/23/chunk-load/" class="media-left">
+            <a href="/2020/10/11/about-failed-to-create-a-child-event-error/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="公告">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="关于failed to create a child event loop报错的解决方法">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-07-23T03:24:50.000Z">2020-07-23</time></div>
-                    <a href="/2020/07/23/chunk-load/" class="title has-link-black-ter is-size-6 has-text-weight-normal">公告</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-10-11T14:22:00.000Z">2020-10-11</time></div>
+                    <a href="/2020/10/11/about-failed-to-create-a-child-event-error/" class="title has-link-black-ter is-size-6 has-text-weight-normal">关于failed to create a child event loop报错的解决方法</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
                     </p>
@@ -452,9 +482,9 @@
         <ul class="menu-list">
         
         <li>
-            <a class="level is-marginless" href="/archives/2020/07/">
+            <a class="level is-marginless" href="/archives/2020/10/">
                 <span class="level-start">
-                    <span class="level-item">七月 2020</span>
+                    <span class="level-item">十月 2020</span>
                 </span>
                 <span class="level-end">
                     <span class="level-item tag">1</span>
@@ -499,16 +529,16 @@
         
         <article class="media">
             
-            <a href="/2020/07/23/chunk-load/" class="media-left">
+            <a href="/2020/10/11/about-failed-to-create-a-child-event-error/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="公告">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="关于failed to create a child event loop报错的解决方法">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-07-23T03:24:50.000Z">2020-07-23</time></div>
-                    <a href="/2020/07/23/chunk-load/" class="title has-link-black-ter is-size-6 has-text-weight-normal">公告</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-10-11T14:22:00.000Z">2020-10-11</time></div>
+                    <a href="/2020/10/11/about-failed-to-create-a-child-event-error/" class="title has-link-black-ter is-size-6 has-text-weight-normal">关于failed to create a child event loop报错的解决方法</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a>
                     </p>
@@ -528,9 +558,9 @@
         <ul class="menu-list">
         
         <li>
-            <a class="level is-marginless" href="/archives/2020/07/">
+            <a class="level is-marginless" href="/archives/2020/10/">
                 <span class="level-start">
-                    <span class="level-item">七月 2020</span>
+                    <span class="level-item">十月 2020</span>
                 </span>
                 <span class="level-end">
                     <span class="level-item tag">1</span>
