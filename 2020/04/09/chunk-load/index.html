@@ -7,16 +7,21 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>归档: 2021 - HackerRouter&#39;s Blog</title>
+<title>【MCJE】1.14+区块加载机制讲解 - HackerRouter&#39;s Blog</title>
 
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="HackerRouter&#39;s Blog">
-<meta property="og:url" content="https://hackerrouter.xyz/archives/2021/index.html">
+    <meta name="description" content="本文内容参考了CV4639814、CV3395631，只是简略地科普一下。如有疏漏，欢迎私信或在评论区里指出。1.14+时，每个被加载的区块都有一组有序且与之相关的”加载标签”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MCJE】1.14+区块加载机制讲解">
+<meta property="og:url" content="https://hackerrouter.xyz/2020/04/09/chunk-load/index.html">
 <meta property="og:site_name" content="HackerRouter&#39;s Blog">
+<meta property="og:description" content="本文内容参考了CV4639814、CV3395631，只是简略地科普一下。如有疏漏，欢迎私信或在评论区里指出。1.14+时，每个被加载的区块都有一组有序且与之相关的”加载标签”。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://hackerrouter.xyz/images/og_image.png">
+<meta property="article:published_time" content="2020-04-09T03:24:50.000Z">
+<meta property="article:modified_time" content="2021-01-28T07:54:32.576Z">
 <meta property="article:author" content="HackerRouter">
+<meta property="article:tag" content="＃Minecraft＃">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://hackerrouter.xyz/images/og_image.png">
 
@@ -76,7 +81,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="HackerRouter&#39;s Blog" height="28">
+                <img src="/images/logo.svg" alt="【MCJE】1.14+区块加载机制讲解" height="28">
             
             </a>
         </div>
@@ -129,95 +134,177 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-04-09T03:24:50.000Z">2020-04-09</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/%EF%BC%83Minecraft/">＃Minecraft</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 873 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                【MCJE】1.14+区块加载机制讲解
+            
+        </h1>
+        <div class="content">
+            <p>本文内容参考了<a href="https://www.bilibili.com/read/cv4639814">CV4639814</a>、<a href="https://www.bilibili.com/read/cv3395631">CV3395631</a>，只是简略地科普一下。如有疏漏，欢迎私信或在评论区里指出。<br>1.14+时，每个被加载的区块都有一组有序且与之相关的”加载标签”。</p>
+<a id="more"></a>
 
-<div class="card widget">
+<p>“加载标签”包含”加载标签”的类型、加载等级及剩余存活时间</p>
+<p>加载等级的范围为22-44，一般来讲，游戏里只会在22-33的范围里。等级越低，则加载的内容更多。</p>
+<p>加载等级的类型共有四种，即强加载区块、弱加载区块、伪加载区块（或称边界）和不可访问区块。</p>
+<p>强加载区块(ET, ENTITY_TICKING)：加载等级 ≤ 31，运行所有游戏特性，运算实体。</p>
+<p>弱加载区块(TI, TICKING)：加载等级 = 32，运行所有游戏特性，除了运算实体。</p>
+<p>伪加载区块(BD, BORDER)：加载等级 = 33，几乎不运行游戏特性，但那里的生物仍会占用刷怪上限。</p>
+<p>不可访问区块：加载等级 ≥ 34，相当于未被加载。</p>
+<p>若有一个区块的加载等级为30，则周围的情况会是下图：</p>
+<img src="/2020/04/09/chunk-load/pic1.png" class title="区块加载示意图">
+
+<p>深绿色部分：强加载区块，加载等级为30</p>
+<p>绿色部分：强加载区块，加载等级为31</p>
+<p>黄色部分：弱加载区块，加载等级为32</p>
+<p>蓝色部分：伪加载区块，加载等级为33</p>
+<p>灰色部分：不可访问区块，加载等级为34</p>
+<p>当一个实体通过传送门后，对应维度的传送门周围的区块会被加载15秒。包含传送门在内的一个区块加载等级为30，周围一圈的区块加载等级则为31，以此类推，会得到上图同样的结果。</p>
+<p>同时，当有两个相距不远的区块加载等级为30时，则可能出现以下这种情况：</p>
+<img src="/2020/04/09/chunk-load/pic2.png" class title="相邻区块加载示意图">
+
+
+<p>我个人比较推荐的区块加载器是我弄的加载器，小巧而精悍，应该是目前为止全世界最小的两类加载器了：</p>
+<img src="/2020/04/09/chunk-load/pic3.png" class title="4*3单片单方向矿车摧毁时钟式稳定地狱门加载器">
+
+<img src="/2020/04/09/chunk-load/pic4.png" class title="3*5单片单方向矿车摧毁检测式稳定地狱门加载器">
+
+<p>运用这些区块加载器永久加载一片区块，在其弱加载或边界加载区块中存放大量怪物占满刷怪上限，就可以制作伪和平装置了。怪存的数量通常来讲为 玩家数量*70 。</p>
+<p>1.14中，可以用刷怪笼占满刷怪上限。</p>
+<p>1.15+时，需要用结构怪物（即随结构生成的怪物）、变成僵尸村民的村民或者凋灵占满刷怪上限。命名，持装备或物品的怪物不占用刷怪上限。</p>
+<p>刷怪笼见<a href="https://www.bilibili.com/video/av74194010">AV74194010</a>，凋零笼子见<a href="https://www.bilibili.com/video/av95075381">AV95075381</a>，运用到僵尸村民的伪和平见<a href="https://www.bilibili.com/video/av89025160">AV89025160</a>或<a href="https://www.bilibili.com/video/av89132545">AV89132545</a>，运用到凋灵的世界最小凋灵伪和平（没错又是我做的）见<a href="https://www.bilibili.com/video/av286609773">AV286609773</a></p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/%EF%BC%83Minecraft%EF%BC%83/" rel="tag">＃Minecraft＃</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
     <div class="card-content">
-        <h3 class="tag is-link">
-        2021
-        </h3>
-        <div class="timeline">
-        
-            <article class="media">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2021-01-16T09:06:12.000Z">2021-01-16</time>
-                        <a href="/2021/01/16/why-i-choose-github-to-build-my-blog/" class="title has-link-black-ter is-size-6 has-text-weight-normal">为什么我又选择用GitHub搭建我的博客</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/%EF%BC%83%E6%97%A5%E5%B8%B8/">＃日常</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="/NONE" alt="支付宝"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2021-01-10T10:06:25.000Z">2021-01-10</time>
-                        <a href="/2021/01/10/why-i-choose-gitee-to-build-my-blog/" class="title has-link-black-ter is-size-6 has-text-weight-normal">为什么我选择用Gitee搭建我的博客</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/%EF%BC%83%E6%97%A5%E5%B8%B8/">＃日常</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2021-01-10T09:08:54.000Z">2021-01-10</time>
-                        <a href="/2021/01/10/en-a-short-story-of-cyberpunk2077-2am-she-calls/" class="title has-link-black-ter is-size-6 has-text-weight-normal">EN原文 赛博朋克2077短篇小说：2AM - She Calls</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/%EF%BC%83%E8%B5%9B%E5%8D%9A%E6%9C%8B%E5%85%8B2077/">＃赛博朋克2077</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="/NONE" alt="微信"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2021-01-09T08:38:12.000Z">2021-01-09</time>
-                        <a href="/2021/01/09/how-to-get-infinite-%E2%82%AC$-in-cyberpunk2077-by-using-cheat-engine/" class="title has-link-black-ter is-size-6 has-text-weight-normal">如何用CheatEngine在赛博朋克2077中获取无限的欧刀</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/%EF%BC%83%E8%B5%9B%E5%8D%9A%E6%9C%8B%E5%85%8B2077/">＃赛博朋克2077</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" rel="noopener" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="NONE" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+                
+<a class="button is-danger donate" href="/NONE" target="_blank" rel="noopener">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
+
+                
         </div>
     </div>
 </div>
 
 
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/05/11/how-to-regard-cnr/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">如何看待CNR事件</span>
+            </a>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: true,
+        verify: true,
+        app_id: 'KXkEe2V1v9S260sC6hTPVliA-gzGzoHsz',
+        app_key: 'DDhqanq4dFFEBLpYQPdbWDRa',
+        placeholder: '请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -916,7 +1003,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="HackerRouter&#39;s Blog" height="28">
+                    <img src="/images/logo.svg" alt="【MCJE】1.14+区块加载机制讲解" height="28">
                 
                 </a>
                 <p class="is-size-7">
