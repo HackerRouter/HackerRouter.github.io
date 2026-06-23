@@ -40,6 +40,10 @@
 
   
 
+  
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3.3.2/dist/waline.css" />
+  
+
   <!-- jquery3.3.1 -->
   <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 
@@ -118,12 +122,28 @@
 
   </div>
   
+    <div class="waline-comment-container">
+      <div id="waline"></div>
+    </div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3.3.2/dist/waline.js';
+
+      init({
+        el: '#waline',
+        serverURL: "https://comment.nothr.xyz",
+        lang: "en",
+        reaction: false,
+      });
+    </script>
+  
+  
     
       <a id="older" class="blog-nav" href="/2026/06/22/quotes-against-nihilism/">OLDER&nbsp;&gt;</a>
       
         
             
 </div>
+
         <div class="footer">
   
     <div class="footer-more">

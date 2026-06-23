@@ -219,6 +219,87 @@ pre .xml .cdata {
   display: block;
   max-width: 100%;
 }
+.waline-comment-container {
+  box-sizing: border-box;
+  width: min(900px, calc(100vw - 40px));
+  max-width: calc(100vw - 40px);
+  margin-top: 48px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  text-align: left;
+}
+.waline-comment-container #waline {
+  --waline-theme-color: #f66;
+  --waline-active-color: #f33;
+  --waline-font-size: 16px;
+  --waline-avatar-size: 3.7rem;
+  font-size: 16px;
+  line-height: 1.2;
+}
+.waline-comment-container #waline .wl-login-info {
+  max-width: 120px;
+  min-width: 96px;
+}
+.waline-comment-container #waline .wl-login-nick {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: normal;
+}
+.waline-comment-container #waline .wl-editor {
+  min-height: 80px;
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.waline-comment-container #waline .wl-panel .wl-footer {
+  margin-top: 1px;
+  padding-top: 1px;
+}
+.waline-comment-container #waline .wl-panel .wl-actions,
+.waline-comment-container #waline .wl-panel .wl-info {
+  margin-top: 0;
+}
+.waline-comment-container #waline .wl-input,
+.waline-comment-container #waline .wl-btn {
+  font-size: 14px;
+}
+.waline-comment-container #waline .wl-btn {
+  padding: 0.3em 0.5em;
+}
+.waline-comment-container #waline .wl-card .wl-content {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 0;
+  margin-bottom: 6px;
+  padding-left: 0.25em;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.waline-comment-container #waline .wl-card .wl-content p {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
+.waline-comment-container #waline .wl-card .wl-content p:last-child {
+  margin-bottom: 0;
+}
+.waline-comment-container #waline .wl-card .wl-nick {
+  font-size: 15px;
+}
+.waline-comment-container #waline .wl-card .wl-meta .wl-addr {
+  display: none;
+}
+.waline-comment-container #waline .wl-card .wl-meta,
+.waline-comment-container #waline .wl-card .wl-actions {
+  font-size: 14px;
+}
+.waline-comment-container #waline .wl-badge {
+  border-radius: 0;
+  padding: 0 0.25em;
+  line-height: 1.35;
+}
 .blog-nav {
   position: fixed;
   bottom: 20px;
@@ -272,6 +353,11 @@ pre .xml .cdata {
   .main {
     margin-top: 32px;
     min-height: calc(100vh - 140px);
+  }
+  .waline-comment-container {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    margin-top: 36px;
   }
   .post h1 {
     font-size: 24px;
