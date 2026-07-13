@@ -8,12 +8,12 @@
   <meta name="author" content="NOT_HR" />
   <meta name="description" content="" />
   
-    <meta name="robots" content="noindex" />
-  
   
   <title>
     
-      NOT_HR&#39;S BLOG
+      To Feel Alive, 
+      
+      
     
   </title>
 
@@ -33,12 +33,14 @@
 
 
   
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3.3.2/dist/waline.css" />
+  
+
+  
     
-<link rel="stylesheet" href="/css/index.css">
-
-  
-
-  
+<link rel="stylesheet" href="/css/post.css">
 
   
 
@@ -76,135 +78,52 @@
 
 
       <div class="main">
-        <div>
-  <ul>
-    <!-- 遍历渲染文章 -->
-    
-    <li>
-      <h3>Jun 18, 2026</h3>
-      <h2>
-        <a href="/2026/06/18/tranquility/">
-          
-            
-              <span>Tranquility</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 16, 2026</h3>
-      <h2>
-        <a href="/2026/06/16/draft0/">
-          
-            
-              <span>Draft - 0</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 16, 2026</h3>
-      <h2>
-        <a href="/2026/06/16/we-no-longer/">
-          
-            
-              <span>We no longer</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 15, 2026</h3>
-      <h2>
-        <a href="/2026/06/15/escape/">
-          
-            
-              <span>Escape</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 15, 2026</h3>
-      <h2>
-        <a href="/2026/06/15/thoughts0/">
-          
-            
-              <span>Thoughts - 0</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 14, 2026</h3>
-      <h2>
-        <a href="/2026/06/14/STFU/">
-          
-            
-              <span>STFU</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 14, 2026</h3>
-      <h2>
-        <a href="/2026/06/14/amnesia/">
-          
-            
-              <span>Amnesia</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 10, 2026</h3>
-      <h2>
-        <a href="/2026/06/10/machine0/">
-          
-            
-              <span>Machine - 0</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 10, 2026</h3>
-      <h2>
-        <a href="/2026/06/10/hello-world/">
-          
-            
-              <span>Hello World</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-  </ul>
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+
+<div class="post">
+  <h3 class="date">
+    Jul 14, 2026
+  </h3>
+  <h1>
+    To Feel Alive,
+  </h1>
+  <div class="content markdown-body">
+    <p>I must keep thinking.</p>
+
+  </div>
   
-  <nav class="post-navigation">
+    <div class="waline-comment-container">
+      <div id="waline"></div>
+    </div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3.3.2/dist/waline.js';
+
+      init({
+        el: '#waline',
+        serverURL: "https://comment.nothr.xyz",
+        lang: "en",
+        reaction: false,
+      });
+    </script>
+  
+  
     
-      <a id="prev" class="index-nav" href="/">&lt;&nbsp;NEWER</a>
-    
-    
-  </nav>
+      <a id="older" class="blog-nav" href="/2026/07/13/mess/">OLDER&nbsp;&gt;</a>
+      
+        
+            
 </div>
 
         <div class="footer">
