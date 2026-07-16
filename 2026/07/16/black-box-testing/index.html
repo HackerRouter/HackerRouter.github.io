@@ -8,12 +8,12 @@
   <meta name="author" content="NOT_HR" />
   <meta name="description" content="" />
   
-    <meta name="robots" content="noindex" />
-  
   
   <title>
     
-      NOT_HR&#39;S BLOG
+      Testing 
+      
+      
     
   </title>
 
@@ -33,12 +33,14 @@
 
 
   
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3.3.2/dist/waline.css" />
+  
+
+  
     
-<link rel="stylesheet" href="/css/index.css">
-
-  
-
-  
+<link rel="stylesheet" href="/css/post.css">
 
   
 
@@ -76,44 +78,56 @@
 
 
       <div class="main">
-        <div>
-  <ul>
-    <!-- 遍历渲染文章 -->
-    
-    <li>
-      <h3>Jun 10, 2026</h3>
-      <h2>
-        <a href="/2026/06/10/machine0/">
-          
-            
-              <span>Machine - 0</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jun 10, 2026</h3>
-      <h2>
-        <a href="/2026/06/10/hello-world/">
-          
-            
-              <span>Hello World</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-  </ul>
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+
+<div class="post">
+  <h3 class="date">
+    Jul 16, 2026
+  </h3>
+  <h1>
+    Testing
+  </h1>
+  <div class="content markdown-body">
+    <p>Is there a way to figure out which medication I accidentally took an extra dose of while unconscious,</p>
+<p>without having to perform a very questionable self-diagnostic procedure involving surgery and vomiting?</p>
+<hr>
+<p>The good thing is that none of the cases are actually fatal.</p>
+<p>The bad thing… I do not see a fucking bad thing LMAO</p>
+
+  </div>
   
-  <nav class="post-navigation">
+    <div class="waline-comment-container">
+      <div id="waline"></div>
+    </div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3.3.2/dist/waline.js';
+
+      init({
+        el: '#waline',
+        serverURL: "https://comment.nothr.xyz",
+        lang: "en",
+        reaction: false,
+      });
+    </script>
+  
+  
     
-      <a id="prev" class="index-nav" href="/page/2/">&lt;&nbsp;NEWER</a>
-    
-    
-  </nav>
+      <a id="older" class="blog-nav" href="/2026/07/16/impossible-normal-life/">OLDER&nbsp;&gt;</a>
+      
+        
+            
 </div>
 
         <div class="footer">
