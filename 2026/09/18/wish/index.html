@@ -14,7 +14,9 @@
   
   <title>
     
-      NOT_HR&#39;S BLOG
+      Wish 
+      
+      
     
   </title>
 
@@ -34,12 +36,14 @@
 
 
   
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3.3.2/dist/waline.css" />
+  
+
+  
     
-<link rel="stylesheet" href="/css/index.css">
-
-  
-
-  
+<link rel="stylesheet" href="/css/post.css">
 
   
 
@@ -92,148 +96,70 @@
       </div>
 
       <div class="main">
-        <div>
-  <ul>
-    <!-- 遍历渲染文章 -->
-    
-    <li>
-      <h3>Sep 18, 2026</h3>
-      <h2>
-        <a href="/2026/09/18/wish/">
-          
-            
-              <span>Wish</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 18, 2026</h3>
-      <h2>
-        <a href="/2026/09/18/how/">
-          
-            
-              <span>How</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 16, 2026</h3>
-      <h2>
-        <a href="/2026/09/16/in-memory-of-him/">
-          
-            
-              <span>In Memory Of Him</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 13, 2026</h3>
-      <h2>
-        <a href="/2026/09/13/meee/">
-          
-            
-              <span>Side B of Me IRL</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 10, 2026</h3>
-      <h2>
-        <a href="/2026/09/10/question/">
-          
-            
-              <span>Question</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 01, 2026</h3>
-      <h2>
-        <a href="/2026/09/01/promise/">
-          
-            
-              <span>Promise</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Aug 22, 2026</h3>
-      <h2>
-        <a href="/2026/08/22/confusion/">
-          
-            
-              <span>Confusion</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Aug 18, 2026</h3>
-      <h2>
-        <a href="/2026/08/18/books/">
-          
-            
-              <span>Books</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Aug 08, 2026</h3>
-      <h2>
-        <a href="/2026/08/08/over/">
-          
-            
-              <span>XH - over. (feat. KYURO3)</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Jul 25, 2026</h3>
-      <h2>
-        <a href="/2026/07/25/stop/">
-          
-            
-              <span>Stop</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-  </ul>
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<!-- LaTex Display -->
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+
+<div class="post">
+  <h3 class="date">
+    Sep 18, 2026
+  </h3>
+  <h1>
+    Wish
+  </h1>
+  <div class="content markdown-body">
+    <p>Sometimes they called me a genius.</p>
+<p>Sometimes they said I was talented.</p>
+<p>But I wish I could just be normal.</p>
+<p>Or maybe never have been born at all.</p>
+<p>I wish I could just be a normal person, living a normal life.</p>
+<p>I wouldn’t need to do anything great.<br>I wouldn’t need to carry everyone’s expectations.<br>I wouldn’t need to change my body.<br>I wouldn’t need to change my mind.</p>
+<p>I wouldn’t need to face all that hatred and malice just because I’m different.</p>
+<p>I wouldn’t need to deal with all those exhausting formalities in the future just to prove who I am.</p>
+<p>I wouldn’t need to be ostracized.<br>No. No. No. No.</p>
+<p>And I wouldn’t have to know so many things.</p>
+<p>I wouldn’t have to walk down some completely different road in life.</p>
+<p>I wouldn’t have to achieve anything.</p>
+<p>I wouldn’t have to make a name for myself in some field.</p>
+<p>I could just exist.</p>
+<p>Just live.</p>
+<p>And maybe that would have been enough.</p>
+<hr>
+<p>Jesus.</p>
+<p>Does depression ever really go away?</p>
+
+  </div>
   
-  <nav class="post-navigation">
+    <div class="waline-comment-container">
+      <div id="waline"></div>
+    </div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3.3.2/dist/waline.js';
+
+      init({
+        el: '#waline',
+        serverURL: "https://comment.nothr.xyz",
+        lang: "en",
+        reaction: false,
+      });
+    </script>
+  
+  
     
-    
-      <a id="next" class="index-nav" href="/page/2/">OLDER&nbsp;&gt;</a>
-    
-  </nav>
+      <a id="older" class="blog-nav" href="/2026/09/18/how/">OLDER&nbsp;&gt;</a>
+      
+        
+            
 </div>
 
         <div class="footer">

@@ -3,6 +3,9 @@
 
   <head>
   <meta charset="utf-8">
+  
+<script src="/js/theme-init.js"></script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="keywords" content="" />
   <meta name="author" content="NOT_HR" />
@@ -44,6 +47,10 @@
 
   
 
+  
+<link rel="stylesheet" href="/css/appearance.css">
+
+
   <!-- jquery3.3.1 -->
   <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 
@@ -76,6 +83,17 @@
   
 </p>
 
+      <div class="appearance-controls">
+        <button id="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.9 13.1A9 9 0 0 1 10.9 3.1a9 9 0 1 0 10 10Z" />
+          </svg>
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+          </svg>
+        </button>
+      </div>
 
       <div class="main">
         <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
@@ -1745,5 +1763,19 @@
 
 
     </div>
+    <dialog id="content-notice" aria-label="Content notice" aria-describedby="content-notice-text" lang="en">
+  <div id="content-notice-text">
+    <p>This blog may include AI-generated content, discussions of mental illness and psychological distress, as well as dark, negative, or potentially disturbing themes.</p>
+    <p>Some content may be uncomfortable or emotionally triggering for certain readers.</p>
+    <p>By clicking <strong>OK</strong>, you acknowledge that you have read and understood this notice and choose to continue at your own discretion.</p>
+  </div>
+  <form method="dialog">
+    <button type="submit" autofocus>OK</button>
+  </form>
+</dialog>
+
+    
+<script src="/js/appearance.js"></script>
+
   </body>
 </html>
