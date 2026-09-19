@@ -150,11 +150,33 @@ html.notice-open {
 }
 
 #content-notice form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
   margin: 28px 0 0;
   text-align: right;
 }
 
+.notice-preference {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.notice-preference input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--page-heading);
+}
+
 #content-notice button {
+  margin-left: auto;
   padding: 9px 28px;
   border: 1px solid var(--page-heading);
   border-radius: 0;

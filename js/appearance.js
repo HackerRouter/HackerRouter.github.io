@@ -2,6 +2,8 @@
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
   var notice = document.getElementById('content-notice');
+  var dismissNotice = document.getElementById('notice-dismiss');
+  var noticeDismissed = false;
 
   function updateToggle() {
     var dark = root.dataset.theme === 'dark';
@@ -20,11 +22,24 @@
   updateToggle();
 
   function showNotice() {
+    try {
+      noticeDismissed = localStorage.getItem('leedom-notice-dismissed') === 'true';
+    } catch (error) {}
+    if (noticeDismissed) return;
     if (!notice.open) {
       notice.showModal();
       root.classList.add('notice-open');
     }
   }
+
+  notice.querySelector('form').addEventListener('submit', function () {
+    if (dismissNotice.checked) {
+      noticeDismissed = true;
+      try {
+        localStorage.setItem('leedom-notice-dismissed', 'true');
+      } catch (error) {}
+    }
+  });
 
   notice.addEventListener('cancel', function (event) {
     event.preventDefault();
