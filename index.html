@@ -1,291 +1,177 @@
-<!DOCTYPE html>
-<html lang="en">
-
-  <head>
+<!doctype html>
+<html lang="zh-CN">
+<head>
   <meta charset="utf-8">
-  
-<script src="/js/theme-init.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <title>...</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #090909; }
+    main { position: relative; display: grid; place-items: center; height: 100%; overflow: hidden; isolation: isolate; }
+    canvas { image-rendering: pixelated; }
+    #grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+    h1 { position: relative; margin: 0; width: min(55vw, 86vh, 840px); line-height: 1; color: #bb1019; text-align: center; }
+    h1 span { font: bold min(25vw, 46vh) / 0.75 monospace; }
+    h1 canvas { display: block; width: 100%; height: auto; }
+    h1:has(canvas) span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    @media (max-aspect-ratio: 3/4) { h1 { width: 85vw; } }
+    @media (prefers-reduced-motion: no-preference) {
+      h1 canvas { animation: slip 9s steps(1, end) infinite; }
+      @keyframes slip {
+        0%, 66%, 68%, 100% { transform: none; }
+        66.8% { transform: translateX(-2px); }
+        67.4% { transform: translateX(1px); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <canvas id="grain" aria-hidden="true"></canvas>
+    <h1><span>...</span></h1>
+  </main>
+  <script>
+    const surface = document.querySelector('main');
+    const grain = document.getElementById('grain');
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="" />
-  <meta name="author" content="NOT_HR" />
-  <meta name="description" content="" />
-  
-  
-  <title>
-    
-      NOT_HR&#39;S BLOG
-    
-  </title>
+    function seeded(seed) {
+      return () => {
+        seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+        return seed / 4294967296;
+      };
+    }
 
-  
-    <link rel="apple-touch-icon" href="/images/favicon.png">
-    <link rel="icon" href="/images/favicon.png">
-  
+    function lattice(x, y) {
+      let n = Math.imul(x, 374761393) + Math.imul(y, 668265263);
+      n = Math.imul(n ^ (n >>> 13), 1274126177);
+      return ((n ^ (n >>> 16)) >>> 0) / 4294967296;
+    }
 
-  <!-- Raleway-Font -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto:400,400italic,600|Roboto+Mono" rel="stylesheet">
+    function noise(x, y) {
+      const i = Math.floor(x), j = Math.floor(y);
+      const fx = x - i, fy = y - j;
+      const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy);
+      const a = lattice(i, j), b = lattice(i + 1, j);
+      const c = lattice(i, j + 1), d = lattice(i + 1, j + 1);
+      return (a + (b - a) * u) * (1 - v) + (c + (d - c) * u) * v;
+    }
 
-  <!-- hexo site css -->
-  
-<link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/common.css">
-<link rel="stylesheet" href="/iconfont/iconfont.css">
+    function paintGrain() {
+      const rect = surface.getBoundingClientRect();
+      const pixel = Math.max(1.8, Math.max(rect.width, rect.height) / 800);
+      const w = Math.max(1, Math.round(rect.width / pixel));
+      const h = Math.max(1, Math.round(rect.height / pixel));
+      if (grain.width === w && grain.height === h) return;
+      grain.width = w;
+      grain.height = h;
+      const ctx = grain.getContext('2d');
+      if (!ctx) return;
+      const random = seeded(491);
+      const frame = ctx.createImageData(w, h);
+      for (let y = 0; y < h; y++) {
+        const v = y / h;
+        const row = random();
+        const shift = noise(3, y / 3) * 0.07 + (row > 0.95 ? 0.08 : 0);
+        for (let x = 0; x < w; x++) {
+          const u = x / w;
+          const edge = Math.min(u, 1 - u);
+          const warp = noise(u * 4, v * 11) * 0.07;
+          const upper = Math.abs(v - (0.075 + u * 0.13 + warp));
+          const lower = Math.abs(v - (0.91 - u * 0.12 + warp * 0.8));
+          const tear = Math.max(
+            1.15 - upper * 8.5 - u * 0.96,
+            1.10 - lower * 7.5 - (1 - u) * 1.03,
+            0.83 - edge * 3.8 - noise(2, v * 12) * 0.39
+          );
+          const cloud = noise(u * 11 + shift, v * 23) * 0.50
+            + noise(u * 36 + shift, v * 90) * 0.27 + noise(x / 5, y / 3) * 0.23;
+          const strength = tear + (cloud - 0.54) * 1.16;
+          const dust = random();
+          let shade = 8 + Math.floor(cloud * 4) + (y % 3 === 0 ? 2 : 0);
+          if (strength > 0.32) {
+            shade += Math.round((strength - 0.32) * 18);
+            if (dust < (strength - 0.28) * 0.67) {
+              shade += 9 + Math.floor(Math.max(0, strength - 0.4) * 65);
+            }
+            if (strength > 0.88 && (x + y) % 2 === 0) shade += 25;
+          }
+          if (strength > 0.86 && row < 0.16) shade = Math.floor(shade * 0.48);
+          if (dust > 0.9985 && strength > 0) shade += 31;
+          const index = (y * w + x) * 4;
+          frame.data[index] = frame.data[index + 1] = frame.data[index + 2] = shade;
+          frame.data[index + 3] = 255;
+        }
+      }
+      ctx.putImageData(frame, 0, 0);
+      for (let i = 0; i < 420; i++) {
+        const fromLeft = random() < 0.5;
+        const anchor = fromLeft ? 0.105 : 0.875;
+        const offset = (random() + random() - 1) * h * 0.27;
+        const y = Math.floor(h * anchor + offset);
+        const inset = Math.pow(random(), 2) * w * 0.44;
+        const length = Math.ceil(Math.pow(random(), 3) * w * 0.29) + 1;
+        const shade = Math.floor(14 + random() * 69);
+        ctx.fillStyle = 'rgb(' + shade + ' ' + shade + ' ' + shade + ')';
+        ctx.fillRect(Math.floor(fromLeft ? inset : w - inset - length), y, length, random() > 0.94 ? 3 : 1);
+      }
+    }
 
+    function paintTitle() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 100;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.imageSmoothingEnabled = false;
+      const random = seeded(8256);
+      const ink = ['#870b12', '#a00b14', '#b60d19', '#c5101c', '#d01421'];
+      [52, 150, 248].forEach((center, index) => {
+        for (let y = 28; y < 72; y++) {
+          const step = Math.min(y - 28, 71 - y);
+          const bevel = step < 2 ? 5 : step < 5 ? 2 : 0;
+          const shift = y >= 42 + index && y <= 44 + index ? -6 - index * 2
+            : y >= 58 - index && y <= 59 - index ? 6 + index : 0;
+          const start = center - 22 + bevel + shift;
+          const width = 44 - bevel * 2;
+          const band = y % 8 === 0 ? -1 : 0;
+          for (let x = 0; x < width; x++) {
+            const density = noise((x + center) / 12, y / 8);
+            const r = random();
+            if (r < 0.025 + (density < 0.34 ? 0.09 : 0)) continue;
+            const tone = Math.max(0, Math.min(4, Math.floor(density * 3 + r * 2) + band));
+            ctx.fillStyle = ink[tone];
+            ctx.fillRect(start + x, y, 1, 1);
+          }
+        }
+        for (let i = 0; i < 42; i++) {
+          const y = 30 + Math.floor(random() * 42);
+          const x = center - 25 + Math.floor(random() * 52);
+          ctx.fillStyle = random() < 0.72 ? '#14090a' : '#640b12';
+          ctx.fillRect(x, y, 1 + Math.floor(random() ** 3 * 19), 1);
+        }
+        for (let i = 0; i < 53; i++) {
+          const side = random() < 0.5 ? -1 : 1;
+          const x = center + side * (21 + Math.floor(random() ** 2 * 23));
+          const y = 26 + Math.floor(random() * 48);
+          ctx.fillStyle = random() < 0.82 ? '#510b11' : '#8f0b14';
+          ctx.fillRect(x, y, Math.ceil(random() ** 3 * 7), 1);
+        }
+        for (let i = 0; i < 5; i++) {
+          const x = center - 17 + Math.floor(random() * 34);
+          const height = 2 + Math.floor(random() ** 2 * 9);
+          ctx.fillStyle = '#710a11';
+          ctx.fillRect(x, 71, 1, height);
+          ctx.fillRect(x, 73 + height, 1, 1);
+        }
+      });
+      canvas.setAttribute('aria-hidden', 'true');
+      document.querySelector('h1').append(canvas);
+    }
 
-  
-    
-<link rel="stylesheet" href="/css/index.css">
-
-  
-
-  
-
-  
-
-  
-<link rel="stylesheet" href="/css/appearance.css">
-
-
-  <!-- jquery3.3.1 -->
-  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-
-  <!-- fancybox -->
-  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
-  <script async src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js"></script>
-  
-<script src="/js/fancybox.js"></script>
-
-
-<meta name="generator" content="Hexo 8.1.2"></head>
-
-
-  <body>
-    <div id="app">
-      <div class="header">
-  <a href="/">NOT_HR</a>
-</div>
-
-
-      <p class="links">
-  
-    <a title="archives" target="" href="/archives/">
-      <i class="iconfont icon-bookmark"></i>
-    </a>
-  
-    <a title="github" target="_blank" href="https://github.com/HackerRouter/HackerRouter.github.io">
-      <i class="iconfont icon-github"></i>
-    </a>
-  
-</p>
-
-      <div class="appearance-controls">
-        <button id="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
-          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <path d="M20.9 13.1A9 9 0 0 1 10.9 3.1a9 9 0 1 0 10 10Z" />
-          </svg>
-          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="main">
-        <div>
-  <ul>
-    <!-- 遍历渲染文章 -->
-    
-    <li>
-      <h3>Nov 14, 2026</h3>
-      <h2>
-        <a href="/2026/11/14/wonder/">
-          
-            
-              <span>Wonder</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Nov 08, 2026</h3>
-      <h2>
-        <a href="/2026/11/08/truth/">
-          
-            
-              <span>Truth</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Oct 12, 2026</h3>
-      <h2>
-        <a href="/2026/10/12/cat/">
-          
-            
-              <span>Cat</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Oct 02, 2026</h3>
-      <h2>
-        <a href="/2026/10/02/persistence/">
-          
-            
-              <span>Persistence (Rework)</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 18, 2026</h3>
-      <h2>
-        <a href="/2026/09/18/wish/">
-          
-            
-              <span>Wish</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 18, 2026</h3>
-      <h2>
-        <a href="/2026/09/18/how/">
-          
-            
-              <span>How</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 16, 2026</h3>
-      <h2>
-        <a href="/2026/09/16/in-memory-of-him/">
-          
-            
-              <span>In Memory Of Him</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 13, 2026</h3>
-      <h2>
-        <a href="/2026/09/13/meee/">
-          
-            
-              <span>Side B of Me IRL</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 10, 2026</h3>
-      <h2>
-        <a href="/2026/09/10/question/">
-          
-            
-              <span>Question</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-    <li>
-      <h3>Sep 01, 2026</h3>
-      <h2>
-        <a href="/2026/09/01/promise/">
-          
-            
-              <span>Promise</span>
-            
-          
-        </a>
-      </h2>
-    </li>
-    
-  </ul>
-  
-  <nav class="post-navigation">
-    
-    
-      <a id="next" class="index-nav" href="/page/2/">OLDER&nbsp;&gt;</a>
-    
-  </nav>
-</div>
-
-        <div class="footer">
-  
-    <div class="footer-more">
-      
-        <a target="_blank" rel="noopener" href="https://github.com/HackerRouter/HackerRouter.github.io">Copyright © NOT_HR 2026</a>
-        
-    </div>
-  
-    <div class="footer-more">
-      
-        <a target="_blank" rel="noopener" href="https://github.com/leedom92/hexo-theme-leedom">Theme by Leedom | Powered by Hexo</a>
-        
-    </div>
-  
-</div>
-
-      </div>
-
-      <div class="back-to-top hidden">
-  <a href="javascript: void(0)">
-    <i class="iconfont icon-chevronup"></i>
-  </a>
-</div>
-
-
-<script src="/js/backtotop.js"></script>
-
-
-
-      
-
-
-    </div>
-    <dialog id="content-notice" aria-label="Content notice" aria-describedby="content-notice-text" lang="en">
-  <div id="content-notice-text">
-    <p>This blog may include AI-generated content, discussions of mental illness and psychological distress, as well as dark, negative, or potentially disturbing themes.</p>
-    <p>Some content may be uncomfortable or emotionally triggering for certain readers.</p>
-    <p>By clicking <strong>OK</strong>, you acknowledge that you have read and understood this notice and choose to continue at your own discretion.</p>
-  </div>
-  <form method="dialog">
-    <label class="notice-preference">
-      <input id="notice-dismiss" type="checkbox">
-      <span>Don't show this again</span>
-    </label>
-    <button type="submit" autofocus>OK</button>
-  </form>
-</dialog>
-
-    
-<script src="/js/appearance.js"></script>
-
-  </body>
+    paintTitle();
+    paintGrain();
+    new ResizeObserver(paintGrain).observe(surface);
+  </script>
+</body>
 </html>
